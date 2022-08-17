@@ -2,6 +2,12 @@
 
 const express = require("express");
 const app = express();
+const { convertStrNums } = require("./utils");
+const {
+  findMean,
+  findMedian,
+  findMode,
+} = require("./stats");
 
 // useful error class to throw
 const { NotFoundError, BadRequestError } = require("./expressError");
@@ -11,24 +17,11 @@ const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
 /** Finds mean of nums in qs: returns {operation: "mean", result } */
 app.get("/mean", function (req, res) {
-  const nums = req.query.nums;
+  const strNums = req.query.nums;
 
-  if (!nums) {
-    throw new BadRequestError("Nums are required");
-  }
-  let numbers = nums.split(",");
+  const nums = convertStrNums(strNums);
 
-
-  numbers = numbers.map(function (n) {
-    if (isNaN(parseInt(n))) {
-      throw new BadRequestError(`${n} is not a number`);
-    }
-    n = parseInt(n);
-    return n;
-  });
-
-  const sum = numbers.reduce((previousValue, currValue) => previousValue + currValue, 0);
-  const mean = sum / numbers.length;
+  const mean = findMean(nums);
 
   return res.send({
     operation: "mean",
@@ -37,9 +30,34 @@ app.get("/mean", function (req, res) {
 });
 
 /** Finds median of nums in qs: returns {operation: "median", result } */
+app.get("/median", function (req, res) {
+  const strNums = req.query.nums;
+
+  const nums = convertStrNums(strNums);
+
+  const median = findMedian(nums);
+
+  return res.send({
+    operation: "median",
+    value: median
+  });
+});
 
 
 /** Finds mode of nums in qs: returns {operation: "mean", result } */
+app.get("/mode", function (req, res) {
+  const strNums = req.query.nums;
+
+  const nums = convertStrNums(strNums);
+
+  const mode = findMode(nums);
+
+  return res.send({
+    operation: "mode",
+    value: mode
+  });
+});
+
 
 
 /** 404 handler: matches unmatched routes; raises NotFoundError. */
