@@ -12,7 +12,6 @@ const {
 // useful error class to throw
 const { NotFoundError, BadRequestError } = require("./expressError");
 
-const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
 
 /** Finds mean of nums in qs: returns {operation: "mean", result } */

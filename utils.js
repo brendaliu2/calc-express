@@ -1,6 +1,6 @@
 const { BadRequestError } = require("./expressError");
 
-
+// const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 /** Convert strNums like ["1","2","3"] to [1, 2, 3]. */
 
 function convertStrNums(strNums) {
@@ -8,18 +8,14 @@ function convertStrNums(strNums) {
   // be handled in your route
   if (!strNums) throw new BadRequestError(`num is required`);
 
-  let numbers = strNums.split(",");
+  let queryStr = strNums.split(",");
 
-  numbers = numbers.map(function (n) {
+  return queryStr.map(function (n) {
     if (isNaN(Number(n))) {
       throw new BadRequestError(`${n} is not a number`);
     }
-    n = parseInt(n);
-    return n;
+    return parseInt(n);
   });
-
-  return numbers;
-
 }
 
 
