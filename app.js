@@ -26,7 +26,7 @@ app.get("/mean", function (req, res) {
   return res.send({
     operation: "mean",
     value: mean
-  });
+  });``
 });
 
 /** Finds median of nums in qs: returns {operation: "median", result } */

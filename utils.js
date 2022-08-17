@@ -11,7 +11,7 @@ function convertStrNums(strNums) {
   let numbers = strNums.split(",");
 
   numbers = numbers.map(function (n) {
-    if (isNaN(parseInt(n))) {
+    if (isNaN(Number(n))) {
       throw new BadRequestError(`${n} is not a number`);
     }
     n = parseInt(n);
