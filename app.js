@@ -4,13 +4,37 @@ const express = require("express");
 const app = express();
 
 // useful error class to throw
-const { NotFoundError } = require("./expressError");
+const { NotFoundError, BadRequestError } = require("./expressError");
 
 const MISSING = "Expected key `nums` with comma-separated list of numbers.";
 
 
 /** Finds mean of nums in qs: returns {operation: "mean", result } */
+app.get("/mean", function (req, res) {
+  const nums = req.query.nums;
 
+  if (!nums) {
+    throw new BadRequestError("Nums are required");
+  }
+  let numbers = nums.split(",");
+
+
+  numbers = numbers.map(function (n) {
+    if (isNaN(parseInt(n))) {
+      throw new BadRequestError(`${n} is not a number`);
+    }
+    n = parseInt(n);
+    return n;
+  });
+
+  const sum = numbers.reduce((previousValue, currValue) => previousValue + currValue, 0);
+  const mean = sum / numbers.length;
+
+  return res.send({
+    operation: "mean",
+    value: mean
+  });
+});
 
 /** Finds median of nums in qs: returns {operation: "median", result } */
 
